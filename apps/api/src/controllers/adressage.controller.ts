@@ -62,7 +62,7 @@ export class AdressageController {
   async getById(req: AuthRequest, res: Response): Promise<void> {
     try {
       const adressage = await prisma.adressage.findUnique({
-        where: { id: req.params.id },
+        where: { id: req.params.id as string },
         include: {
           medecinReferent: true,
           medecinDestinataire: true,
@@ -86,7 +86,7 @@ export class AdressageController {
   async updateStatut(req: AuthRequest, res: Response): Promise<void> {
     try {
       const adressage = await prisma.adressage.update({
-        where: { id: req.params.id },
+        where: { id: req.params.id as string },
         data: {
           statut: req.body.statut,
           traitePar: req.body.traitePar || req.user?.username,

@@ -41,7 +41,7 @@ export class PatientController {
   async getById(req: AuthRequest, res: Response): Promise<void> {
     try {
       const patient = await prisma.patient.findUnique({
-        where: { id: req.params.id },
+        where: { id: req.params.id as string },
         include: { adressages: true },
       });
 

@@ -34,7 +34,7 @@ export class MedecinController {
   async getById(req: AuthRequest, res: Response): Promise<void> {
     try {
       const medecin = await prisma.medecin.findUnique({
-        where: { id: req.params.id },
+        where: { id: req.params.id as string },
         select: {
           id: true,
           username: true,
@@ -66,7 +66,7 @@ export class MedecinController {
   async update(req: AuthRequest, res: Response): Promise<void> {
     try {
       const medecin = await prisma.medecin.update({
-        where: { id: req.params.id },
+        where: { id: req.params.id as string },
         data: req.body,
         select: {
           id: true,

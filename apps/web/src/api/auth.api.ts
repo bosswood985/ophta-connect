@@ -1,5 +1,5 @@
 import apiClient from './client';
-import { AuthTokens, LoginCredentials, AuthUser } from '@ophta-connect/shared';
+import type { AuthTokens, LoginCredentials, AuthUser } from '@ophta-connect/shared';
 
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<{ user: AuthUser; tokens: AuthTokens }> => {

@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AuthUser, AuthTokens } from '@ophta-connect/shared';
+import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import type { AuthUser } from '@ophta-connect/shared';
 import { authApi } from '../api/auth.api';
 
 interface AuthContextType {
