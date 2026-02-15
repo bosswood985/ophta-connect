@@ -14,6 +14,10 @@ import medecinRoutes from './routes/medecin.routes';
 import patientRoutes from './routes/patient.routes';
 import adressageRoutes from './routes/adressage.routes';
 import motifRoutes from './routes/motif.routes';
+import favoriRoutes from './routes/favori.routes';
+import courierTemplateRoutes from './routes/courierTemplate.routes';
+import messageRoutes from './routes/message.routes';
+import uploadRoutes from './routes/upload.routes';
 
 const app = express();
 
@@ -40,6 +44,10 @@ app.use('/api/medecins', medecinRoutes);
 app.use('/api/patients', patientRoutes);
 app.use('/api/adressages', adressageRoutes);
 app.use('/api/motifs', motifRoutes);
+app.use('/api/favoris', favoriRoutes);
+app.use('/api/courier-templates', courierTemplateRoutes);
+app.use('/api/messages', messageRoutes);
+app.use('/api/uploads', uploadRoutes);
 
 // Error handling
 app.use(errorHandler);

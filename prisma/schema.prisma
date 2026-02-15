@@ -18,6 +18,7 @@ model Medecin {
   specialites     String[]
   telephone       String?
   doctolibUrl     String?
+  delaiIntervention String? // Délai d'intervention du praticien (ex: "48h", "1 semaine")
   role            Role      @default(MEDECIN)
   actif           Boolean   @default(true)
   createdAt       DateTime  @default(now())
@@ -26,7 +27,11 @@ model Medecin {
   adressagesEnvoyes   Adressage[] @relation("MedecinReferent")
   adressagesRecus     Adressage[] @relation("MedecinDestinataire")
   templates           TemplatePrerempli[]
+  courierTemplates    CourierTemplate[]
   auditLogs           AuditLog[]
+  favoris             Favori[]
+  messagesSent        Message[] @relation("MessageSender")
+  messagesReceived    Message[] @relation("MessageReceiver")
 }
 
 enum Role {
@@ -75,6 +80,10 @@ model Adressage {
   dateRdv             DateTime?
   traitePar           String?
   traiteA             DateTime?
+  respondedAt         DateTime?       // Temps de réponse du praticien
+  convoqueAt          DateTime?       // Date de convocation du patient
+  readresseAt         DateTime?       // Date de réadressage vers le médecin référent
+  readressageCount    Int             @default(0) // Nombre de réadressages
   createdAt           DateTime        @default(now())
   updatedAt           DateTime        @updatedAt
 
@@ -83,12 +92,15 @@ model Adressage {
   patient             Patient         @relation(fields: [patientId], references: [id])
   motif               MotifAdressage  @relation(fields: [motifId], references: [id])
   documents           Document[]
+  attachments         AdressageAttachment[]
+  messages            Message[]
 }
 
 enum Urgence {
   URGENT
   NORMAL
   NON_URGENT
+  TRES_URGENT
 }
 
 enum StatutAdressage {
@@ -140,4 +152,77 @@ model AuditLog {
   createdAt       DateTime  @default(now())
 
   medecin         Medecin?  @relation(fields: [medecinId], references: [id])
+}
+
+model Favori {
+  id              String    @id @default(uuid())
+  medecinId       String
+  type            FavoriType
+  targetId        String    // ID of the favorited item (medecin, motif, or template)
+  createdAt       DateTime  @default(now())
+
+  medecin         Medecin   @relation(fields: [medecinId], references: [id])
+
+  @@unique([medecinId, type, targetId])
+}
+
+enum FavoriType {
+  PRATICIEN
+  MOTIF
+  TEMPLATE
+}
+
+model CourierTemplate {
+  id              String    @id @default(uuid())
+  medecinId       String
+  nom             String
+  contenu         String    @db.Text
+  variables       String[]  // Liste des variables disponibles (ex: ["{{nom_patient}}", "{{motif}}"])
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  medecin         Medecin   @relation(fields: [medecinId], references: [id])
+}
+
+model Message {
+  id              String    @id @default(uuid())
+  senderId        String
+  receiverId      String
+  adressageId     String?   // Optionnel: lié à un adressage spécifique
+  contenu         String    @db.Text
+  lu              Boolean   @default(false)
+  createdAt       DateTime  @default(now())
+
+  sender          Medecin   @relation("MessageSender", fields: [senderId], references: [id])
+  receiver        Medecin   @relation("MessageReceiver", fields: [receiverId], references: [id])
+  adressage       Adressage? @relation(fields: [adressageId], references: [id])
+  attachments     MessageAttachment[]
+
+  @@index([senderId, receiverId])
+  @@index([adressageId])
+}
+
+model MessageAttachment {
+  id              String    @id @default(uuid())
+  messageId       String
+  nomFichier      String
+  cheminStockage  String
+  typeMime        String
+  tailleFichier   Int
+  createdAt       DateTime  @default(now())
+
+  message         Message   @relation(fields: [messageId], references: [id], onDelete: Cascade)
+}
+
+model AdressageAttachment {
+  id              String    @id @default(uuid())
+  adressageId     String
+  nomFichier      String
+  cheminStockage  String
+  typeMime        String
+  tailleFichier   Int
+  uploadeParId    String    // ID du medecin qui a uploadé
+  createdAt       DateTime  @default(now())
+
+  adressage       Adressage @relation(fields: [adressageId], references: [id], onDelete: Cascade)
 }

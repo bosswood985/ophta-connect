@@ -5,6 +5,8 @@ import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { Adressages } from './pages/Adressages';
 import { Annuaire } from './pages/Annuaire';
+import { Messagerie } from './pages/Messagerie';
+import { Gestion } from './pages/Gestion';
 import { Profil } from './pages/Profil';
 import { Spinner } from './components/ui/Spinner';
 
@@ -53,6 +55,22 @@ const App: React.FC = () => {
             element={
               <ProtectedRoute>
                 <Annuaire />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/messagerie"
+            element={
+              <ProtectedRoute>
+                <Messagerie />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/gestion"
+            element={
+              <ProtectedRoute>
+                <Gestion />
               </ProtectedRoute>
             }
           />

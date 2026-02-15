@@ -2,8 +2,8 @@
 
 @layer base {
   body {
-    background-color: #FAFAFA;
-    color: #171717;
+    background-color: #EBF5FF;
+    color: #001F4D;
   }
 }
 
@@ -19,12 +19,12 @@
   }
   
   .btn-primary {
-    background-color: #2563EB;
+    background-color: #0066E6;
     color: white;
   }
   
   .btn-primary:hover {
-    background-color: #1D4ED8;
+    background-color: #004DB3;
   }
   
   .btn-primary:disabled {
@@ -33,12 +33,12 @@
   }
   
   .btn-secondary {
-    background-color: #E5E5E5;
-    color: #171717;
+    background-color: #D6EBFF;
+    color: #003380;
   }
   
   .btn-secondary:hover {
-    background-color: #D4D4D4;
+    background-color: #B3D9FF;
   }
   
   .btn-secondary:disabled {
@@ -49,25 +49,26 @@
   .input {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #E5E5E5;
+    border: 1px solid #B3D9FF;
     border-radius: 0.5rem;
+    background-color: white;
   }
   
   .input:focus {
     outline: none;
-    ring: 2px solid #2563EB;
+    ring: 2px solid #0066E6;
     border-color: transparent;
   }
   
   .input:disabled {
-    background-color: #F5F5F5;
+    background-color: #F0F9FF;
     cursor: not-allowed;
   }
   
   .card {
     background-color: white;
     border-radius: 0.5rem;
-    border: 1px solid #E5E5E5;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid #D6EBFF;
+    box-shadow: 0 1px 2px 0 rgba(0, 102, 230, 0.05);
   }
 }
