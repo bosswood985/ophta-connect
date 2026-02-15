@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OphtaConnect - Adressage Rapide</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>OphtaConnect</h1>
+      <p class="subtitle">Adressage rapide</p>
+    </header>
+
+    <div id="auth-section">
+      <p class="info">Vous devez être connecté pour créer un adressage.</p>
+      <button id="login-btn" class="btn btn-primary">Se connecter</button>
+    </div>
+
+    <div id="form-section" style="display: none;">
+      <form id="adressage-form">
+        <div class="form-group">
+          <label for="patient-name">Patient</label>
+          <input type="text" id="patient-name" class="input" required>
+        </div>
+
+        <div class="form-group">
+          <label for="medecin">Médecin destinataire</label>
+          <select id="medecin" class="input" required>
+            <option value="">Sélectionner...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="motif">Motif</label>
+          <select id="motif" class="input" required>
+            <option value="">Sélectionner...</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="urgence">Urgence</label>
+          <select id="urgence" class="input">
+            <option value="NORMAL">Normal</option>
+            <option value="URGENT">Urgent</option>
+            <option value="NON_URGENT">Non urgent</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="notes">Notes</label>
+          <textarea id="notes" class="input" rows="3"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Créer l'adressage</button>
+      </form>
+
+      <div id="success-message" class="message success" style="display: none;">
+        Adressage créé avec succès!
+      </div>
+
+      <div id="error-message" class="message error" style="display: none;"></div>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
