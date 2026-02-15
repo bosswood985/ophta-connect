@@ -1,0 +1,143 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Medecin {
+  id              String    @id @default(uuid())
+  username        String    @unique
+  email           String    @unique
+  passwordHash    String
+  nom             String
+  prenom          String
+  rpps            String?   @unique
+  specialites     String[]
+  telephone       String?
+  doctolibUrl     String?
+  role            Role      @default(MEDECIN)
+  actif           Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  adressagesEnvoyes   Adressage[] @relation("MedecinReferent")
+  adressagesRecus     Adressage[] @relation("MedecinDestinataire")
+  templates           TemplatePrerempli[]
+  auditLogs           AuditLog[]
+}
+
+enum Role {
+  MEDECIN
+  SECRETARIAT
+  ADMIN
+}
+
+model Patient {
+  id              String    @id @default(uuid())
+  nom             String
+  prenom          String
+  dateNaissance   DateTime?
+  telephone       String?
+  email           String?
+  numeroSecu      String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  adressages      Adressage[]
+}
+
+model MotifAdressage {
+  id              String    @id @default(uuid())
+  libelle         String
+  categorie       String?
+  textePrerempli  String?
+  actif           Boolean   @default(true)
+  ordre           Int       @default(0)
+  createdAt       DateTime  @default(now())
+
+  adressages      Adressage[]
+  templates       TemplatePrerempli[]
+}
+
+model Adressage {
+  id                  String          @id @default(uuid())
+  medecinReferentId   String
+  medecinDestinataireId String?
+  patientId           String
+  motifId             String
+  notes               String?
+  urgence             Urgence         @default(NORMAL)
+  statut              StatutAdressage @default(EN_ATTENTE)
+  priseRdvPar         PriseRdvPar     @default(SECRETARIAT)
+  dateRdv             DateTime?
+  traitePar           String?
+  traiteA             DateTime?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+
+  medecinReferent     Medecin         @relation("MedecinReferent", fields: [medecinReferentId], references: [id])
+  medecinDestinataire Medecin?        @relation("MedecinDestinataire", fields: [medecinDestinataireId], references: [id])
+  patient             Patient         @relation(fields: [patientId], references: [id])
+  motif               MotifAdressage  @relation(fields: [motifId], references: [id])
+  documents           Document[]
+}
+
+enum Urgence {
+  URGENT
+  NORMAL
+  NON_URGENT
+}
+
+enum StatutAdressage {
+  EN_ATTENTE
+  CONTACTE
+  RDV_PRIS
+  RAPPELER
+  ANNULE
+  TERMINE
+}
+
+enum PriseRdvPar {
+  MEDECIN
+  SECRETARIAT
+}
+
+model Document {
+  id              String    @id @default(uuid())
+  adressageId     String
+  nomFichier      String
+  typeMime        String
+  tailleFichier   Int
+  cheminStockage  String
+  uploadeParId    String
+  createdAt       DateTime  @default(now())
+
+  adressage       Adressage @relation(fields: [adressageId], references: [id])
+}
+
+model TemplatePrerempli {
+  id              String    @id @default(uuid())
+  medecinId       String
+  motifId         String?
+  titre           String
+  contenu         String
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  medecin         Medecin        @relation(fields: [medecinId], references: [id])
+  motif           MotifAdressage? @relation(fields: [motifId], references: [id])
+}
+
+model AuditLog {
+  id              String    @id @default(uuid())
+  medecinId       String?
+  action          String
+  details         Json?
+  ipAddress       String?
+  createdAt       DateTime  @default(now())
+
+  medecin         Medecin?  @relation(fields: [medecinId], references: [id])
+}
