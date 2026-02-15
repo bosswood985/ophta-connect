@@ -6,7 +6,7 @@ export class CourierTemplateController {
   async create(req: AuthRequest, res: Response): Promise<void> {
     try {
       const { nom, contenu, variables } = req.body;
-      const medecinId = req.user!.id;
+      const medecinId = req.user!.userId;
 
       const template = await prisma.courierTemplate.create({
         data: {
@@ -25,7 +25,7 @@ export class CourierTemplateController {
 
   async getAll(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const medecinId = req.user!.id;
+      const medecinId = req.user!.userId;
 
       const templates = await prisma.courierTemplate.findMany({
         where: { medecinId },
@@ -40,8 +40,8 @@ export class CourierTemplateController {
 
   async getById(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const { id } = req.params;
-      const medecinId = req.user!.id;
+      const id = req.params.id as string;
+      const medecinId = req.user!.userId;
 
       const template = await prisma.courierTemplate.findFirst({
         where: { 
@@ -63,9 +63,9 @@ export class CourierTemplateController {
 
   async update(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const { id } = req.params;
+      const id = req.params.id as string;
       const { nom, contenu, variables } = req.body;
-      const medecinId = req.user!.id;
+      const medecinId = req.user!.userId;
 
       const template = await prisma.courierTemplate.updateMany({
         where: { 
@@ -96,8 +96,8 @@ export class CourierTemplateController {
 
   async delete(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const { id } = req.params;
-      const medecinId = req.user!.id;
+      const id = req.params.id as string;
+      const medecinId = req.user!.userId;
 
       const result = await prisma.courierTemplate.deleteMany({
         where: { 

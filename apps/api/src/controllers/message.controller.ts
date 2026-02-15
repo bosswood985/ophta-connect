@@ -6,7 +6,7 @@ export class MessageController {
   async send(req: AuthRequest, res: Response): Promise<void> {
     try {
       const { receiverId, contenu, adressageId } = req.body;
-      const senderId = req.user!.id;
+      const senderId = req.user!.userId;
 
       const message = await prisma.message.create({
         data: {
@@ -33,7 +33,7 @@ export class MessageController {
 
   async getConversations(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const medecinId = req.user!.id;
+      const medecinId = req.user!.userId;
 
       // Get all unique conversations
       const messages = await prisma.message.findMany({
@@ -88,8 +88,8 @@ export class MessageController {
 
   async getConversation(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const { userId } = req.params;
-      const medecinId = req.user!.id;
+      const userId = req.params.userId as string;
+      const medecinId = req.user!.userId;
 
       const messages = await prisma.message.findMany({
         where: {
@@ -131,8 +131,8 @@ export class MessageController {
 
   async markAsRead(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const { id } = req.params;
-      const medecinId = req.user!.id;
+      const id = req.params.id as string;
+      const medecinId = req.user!.userId;
 
       const message = await prisma.message.updateMany({
         where: {
@@ -155,7 +155,7 @@ export class MessageController {
 
   async getUnreadCount(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const medecinId = req.user!.id;
+      const medecinId = req.user!.userId;
 
       const count = await prisma.message.count({
         where: {

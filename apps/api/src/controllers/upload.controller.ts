@@ -49,7 +49,7 @@ export const upload = multer({
 export class UploadController {
   async uploadAdressageAttachment(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const { adressageId } = req.params;
+      const adressageId = req.params.adressageId as string;
       const file = req.file;
 
       if (!file) {
@@ -64,7 +64,7 @@ export class UploadController {
           cheminStockage: file.path,
           typeMime: file.mimetype,
           tailleFichier: file.size,
-          uploadeParId: req.user!.id,
+          uploadeParId: req.user!.userId,
         },
       });
 
@@ -76,7 +76,7 @@ export class UploadController {
 
   async uploadMessageAttachment(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const { messageId } = req.params;
+      const messageId = req.params.messageId as string;
       const file = req.file;
 
       if (!file) {
@@ -102,7 +102,8 @@ export class UploadController {
 
   async downloadAttachment(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const { id, type } = req.params;
+      const id = req.params.id as string;
+      const type = req.params.type as string;
 
       let attachment: any;
       
@@ -134,7 +135,7 @@ export class UploadController {
 
   async getAdressageAttachments(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const { adressageId } = req.params;
+      const adressageId = req.params.adressageId as string;
 
       const attachments = await prisma.adressageAttachment.findMany({
         where: { adressageId },
@@ -149,7 +150,8 @@ export class UploadController {
 
   async deleteAttachment(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const { id, type } = req.params;
+      const id = req.params.id as string;
+      const type = req.params.type as string;
 
       let attachment: any;
       
@@ -158,7 +160,7 @@ export class UploadController {
           where: { id },
         });
         
-        if (attachment && attachment.uploadeParId !== req.user!.id) {
+        if (attachment && attachment.uploadeParId !== req.user!.userId) {
           res.status(403).json({ error: 'Not authorized to delete this attachment' });
           return;
         }

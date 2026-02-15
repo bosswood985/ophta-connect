@@ -6,7 +6,7 @@ export class FavoriController {
   async create(req: AuthRequest, res: Response): Promise<void> {
     try {
       const { type, targetId } = req.body;
-      const medecinId = req.user!.id;
+      const medecinId = req.user!.userId;
 
       const favori = await prisma.favori.create({
         data: {
@@ -24,7 +24,7 @@ export class FavoriController {
 
   async getAll(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const medecinId = req.user!.id;
+      const medecinId = req.user!.userId;
       const { type } = req.query;
 
       const where: any = { medecinId };
@@ -43,8 +43,8 @@ export class FavoriController {
 
   async delete(req: AuthRequest, res: Response): Promise<void> {
     try {
-      const { id } = req.params;
-      const medecinId = req.user!.id;
+      const id = req.params.id as string;
+      const medecinId = req.user!.userId;
 
       await prisma.favori.delete({
         where: { 
@@ -62,7 +62,7 @@ export class FavoriController {
   async toggle(req: AuthRequest, res: Response): Promise<void> {
     try {
       const { type, targetId } = req.body;
-      const medecinId = req.user!.id;
+      const medecinId = req.user!.userId;
 
       // Check if favorite exists
       const existing = await prisma.favori.findUnique({
