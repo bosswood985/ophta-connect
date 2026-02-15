@@ -52,6 +52,10 @@ tmp/
 temp/
 *.tmp
 
+# Uploads
+uploads/
+apps/api/uploads/
+
 # Chrome extension
 apps/chrome-extension/*.crx
 apps/chrome-extension/*.pem
