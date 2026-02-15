@@ -20,25 +20,25 @@ export const Profil: React.FC = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Nom
               </label>
-              <div className="text-gray-900">{user?.nom}</div>
+              <div className="text-gray-900">{user?.nom || 'Non renseigné'}</div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Prénom
               </label>
-              <div className="text-gray-900">{user?.prenom}</div>
+              <div className="text-gray-900">{user?.prenom || 'Non renseigné'}</div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Email
               </label>
-              <div className="text-gray-900">{user?.email}</div>
+              <div className="text-gray-900">{user?.email || 'Non renseigné'}</div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Rôle
               </label>
-              <div className="text-gray-900">{user?.role}</div>
+              <div className="text-gray-900">{user?.role || 'Non renseigné'}</div>
             </div>
           </div>
         </Card>
