@@ -3,6 +3,9 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
+import { Adressages } from './pages/Adressages';
+import { Annuaire } from './pages/Annuaire';
+import { Profil } from './pages/Profil';
 import { Spinner } from './components/ui/Spinner';
 
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -34,6 +37,30 @@ const App: React.FC = () => {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/adressages"
+            element={
+              <ProtectedRoute>
+                <Adressages />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/annuaire"
+            element={
+              <ProtectedRoute>
+                <Annuaire />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profil"
+            element={
+              <ProtectedRoute>
+                <Profil />
               </ProtectedRoute>
             }
           />
