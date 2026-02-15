@@ -54,8 +54,14 @@ export class MessageController {
         orderBy: { createdAt: 'desc' },
       });
 
+      interface ConversationType {
+        partner: { id: string; nom: string; prenom: string; specialites: string[] };
+        lastMessage: typeof messages[0];
+        unreadCount: number;
+      }
+
       // Group by conversation partner
-      const conversationsMap = new Map();
+      const conversationsMap = new Map<string, ConversationType>();
       
       messages.forEach((message) => {
         const partnerId = message.senderId === medecinId 
@@ -74,7 +80,7 @@ export class MessageController {
 
         // Count unread messages
         if (message.receiverId === medecinId && !message.lu) {
-          const conv = conversationsMap.get(partnerId);
+          const conv = conversationsMap.get(partnerId)!;
           conv.unreadCount++;
         }
       });

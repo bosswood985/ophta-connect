@@ -4,6 +4,7 @@ import prisma from '../config/database';
 import multer from 'multer';
 import path from 'path';
 import fs from 'fs';
+import { randomUUID } from 'crypto';
 
 const uploadDir = path.join(process.cwd(), 'uploads');
 
@@ -17,8 +18,9 @@ const storage = multer.diskStorage({
     cb(null, uploadDir);
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + '-' + file.originalname);
+    const ext = path.extname(file.originalname);
+    const basename = path.basename(file.originalname, ext);
+    cb(null, `${randomUUID()}-${basename}${ext}`);
   },
 });
 
@@ -105,15 +107,17 @@ export class UploadController {
       const id = req.params.id as string;
       const type = req.params.type as string;
 
-      let attachment: any;
+      let attachment: { cheminStockage: string; nomFichier: string } | null = null;
       
       if (type === 'adressage') {
         attachment = await prisma.adressageAttachment.findUnique({
           where: { id },
+          select: { cheminStockage: true, nomFichier: true },
         });
       } else if (type === 'message') {
         attachment = await prisma.messageAttachment.findUnique({
           where: { id },
+          select: { cheminStockage: true, nomFichier: true },
         });
       }
 
@@ -153,11 +157,12 @@ export class UploadController {
       const id = req.params.id as string;
       const type = req.params.type as string;
 
-      let attachment: any;
+      let attachment: { cheminStockage: string; uploadeParId?: string } | null = null;
       
       if (type === 'adressage') {
         attachment = await prisma.adressageAttachment.findUnique({
           where: { id },
+          select: { cheminStockage: true, uploadeParId: true },
         });
         
         if (attachment && attachment.uploadeParId !== req.user!.userId) {
@@ -171,6 +176,7 @@ export class UploadController {
       } else if (type === 'message') {
         attachment = await prisma.messageAttachment.findUnique({
           where: { id },
+          select: { cheminStockage: true },
         });
         
         await prisma.messageAttachment.delete({

@@ -27,8 +27,10 @@ export class FavoriController {
       const medecinId = req.user!.userId;
       const { type } = req.query;
 
-      const where: any = { medecinId };
-      if (type) where.type = type;
+      const where: { medecinId: string; type?: 'PRATICIEN' | 'MOTIF' | 'TEMPLATE' } = { medecinId };
+      if (type && (type === 'PRATICIEN' || type === 'MOTIF' || type === 'TEMPLATE')) {
+        where.type = type;
+      }
 
       const favoris = await prisma.favori.findMany({
         where,
