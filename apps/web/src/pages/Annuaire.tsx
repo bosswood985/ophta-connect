@@ -1,11 +1,8 @@
 import React from 'react';
 import { Card } from '../components/ui/Card';
 import { Layout } from '../components/layout/Layout';
-import { useAuth } from '../context/AuthContext';
 
 export const Annuaire: React.FC = () => {
-  const { user } = useAuth();
-
   return (
     <Layout>
       <div className="p-8">
